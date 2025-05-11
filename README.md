@@ -1,17 +1,14 @@
-
-
----
-
-bot.py
-
 import os
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, CallbackQueryHandler
 
+# إعدادات البوت
 ADMIN_USERNAME = "@solphaawolves"
 WALLET_ADDRESS = "EGocDz6tJc4dzTrUgRyCYKag6azww2LKhtHDGbspsM4b"
 
+# رسالة الترحيب
 WELCOME_MSG = """مرحباً بك في نادي SolphaWolves VIP 💎
+
 خطوة واحدة فقط تفصلك عن الوصول إلى أقوى بوت ذكاء اصطناعي على شبكة سولانا!
 
 🔹 مميزات العضوية:
@@ -25,6 +22,7 @@ WELCOME_MSG = """مرحباً بك في نادي SolphaWolves VIP 💎
 اضغط /subscribe للاطلاع على خطط الاشتراك المتاحة.
 """
 
+# رسالة الاشتراك
 SUBSCRIBE_MSG = f"""اختر خطة الاشتراك VIP:
 
 1️⃣ 0.7 SOL — تجربة ليوم واحد  
@@ -37,9 +35,11 @@ SUBSCRIBE_MSG = f"""اختر خطة الاشتراك VIP:
 بعد الإيداع، أرسل لقطة الشاشة لتأكيد الدفع إلى {ADMIN_USERNAME}.
 """
 
+# دالة /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(WELCOME_MSG)
 
+# دالة /subscribe
 async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [InlineKeyboardButton("0.7 SOL - يوم", callback_data='plan1')],
@@ -49,13 +49,15 @@ async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply_markup = InlineKeyboardMarkup(keyboard)
     await update.message.reply_text(SUBSCRIBE_MSG, reply_markup=reply_markup)
 
+# التعامل مع الأزرار
 async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     await query.edit_message_text(text=f"يرجى إرسال إثبات الدفع إلى {ADMIN_USERNAME} لتفعيل اشتراكك.")
 
+# التشغيل الرئيسي
 def main():
-    TOKEN = os.getenv("BOT_TOKEN")  # قم بتحديده في بيئة Render
+    TOKEN = os.getenv("BOT_TOKEN")  # يجب تعيينه في Render أو بيئة العمل
     app = ApplicationBuilder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
@@ -67,5 +69,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
